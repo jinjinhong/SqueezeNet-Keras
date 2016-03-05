@@ -5,14 +5,14 @@ from keras.optimizers import Adam
 from sklearn.preprocessing import OneHotEncoder
 from keras.layers import Activation, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Dropout, Flatten
 
-# For those of you who just look for a Keras implementation of SqueezeNet,
+# For those of you simply looking for a Keras implementation of SqueezeNet,
 # just drop the data preparation part, change the output dim of the model,
 # customize your solver and train the model!
 
 print "Preparing data"
 
-# CIFAR-10 is used to train and test the model
-# for details of the CIFAR-10 dataset, please refer to 
+# CIFAR-10 is used to train and test the model.
+# For details of the CIFAR-10 dataset, please refer to 
 # http://www.cs.toronto.edu/~kriz/cifar.html
 
 def unpickle(filename):
@@ -27,7 +27,7 @@ batches = [unpickle(filename) for filename in filenames]
 
 # Note that each data point in CIFAR-10 is a flattened vector of dim 3072;
 # each image is first flattened in a single channel and then concatenated 
-# to form a larger vector. However, Squeeze net requires that the input to 
+# to form a larger vector. However, Squeeze net requires tthe input to 
 # be of 3 x 227 x 227. Therefore, OpenCV function is invoked to resize each
 # image, which is flattened in the same way as that in CIFAR-10 to preserve
 # consistency.
@@ -86,7 +86,7 @@ print "Data prepared"
 print "Building the model"
 
 # Build the SqueezeNet model. Since Keras does not naively support filters
-# of different shapes, Graph model, rather than Sequential model is used to
+# of different shapes, Graph model, rather than Sequential model, is used to
 # get around this problem.
 # The model architecture is detailed in arXiv 1602.07360
 # http://arxiv.org/pdf/1602.07360v2.pdf
