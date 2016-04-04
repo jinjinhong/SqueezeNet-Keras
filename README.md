@@ -1,4 +1,4 @@
-# Keras_SqueezeNet
+# SqueezeNet-Keras
 
 ## Introduction
 Keras implementation of SqueezeNet(arXiv 1602.07360).  
