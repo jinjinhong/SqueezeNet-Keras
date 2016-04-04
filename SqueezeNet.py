@@ -4,21 +4,32 @@ from keras.models import Graph
 from keras.optimizers import Adam
 from sklearn.preprocessing import OneHotEncoder
 from keras.layers import Activation, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Dropout, Flatten
+import sys
 
+if sys.version_info > (2,):
+    xrange = range
+    
 # For those of you simply looking for a Keras implementation of SqueezeNet,
 # just drop the data preparation part, change the output dim of the model,
 # customize your solver and train the model!
 
-print "Preparing data"
+print ("Preparing data")
 
 # CIFAR-10 is used to train and test the model.
 # For details of the CIFAR-10 dataset, please refer to 
 # http://www.cs.toronto.edu/~kriz/cifar.html
 
 def unpickle(filename):
-    import cPickle
+    from six.moves import cPickle
     f = open(filename, 'rb')
-    dict = cPickle.load(f)
+    if sys.version_info < (3,):
+        dict = cPickle.load(f)
+    else:
+        dict = cPickle.load(f, encoding="bytes")
+        # decode utf8
+        for k, v in dict.items():
+            del(dict[k])
+            dict[k.decode("utf8")] = v
     f.close()
     return dict
 
@@ -81,9 +92,9 @@ enc.fit(y_train.reshape(-1, 1))
 y_train = enc.transform(y_train.reshape(-1, 1)).toarray()
 y_test = enc.transform(y_test.reshape(-1, 1)).toarray()
 
-print "Data prepared"
+print ("Data prepared")
 
-print "Building the model"
+print ("Building the model")
 
 # Build the SqueezeNet model. Since Keras does not naively support filters
 # of different shapes, Graph model, rather than Sequential model, is used to
@@ -340,18 +351,18 @@ graph.add_output(name = 'output', input = 'softmax')
 adam = Adam(lr = 0.001, beta_1 = 0.9, beta_2 = 0.999, epsilon = 1e-08)
 graph.compile(optimizer = adam, loss = {'output': 'categorical_crossentropy'})
 
-print "Model built"
+print ("Model built")
 
-print "Training"
+print ("Training")
 
 graph.fit({'input': x_train, 'output': y_train}, batch_size = 32, nb_epoch = 32, validation_split = 0.1, verbose = 1)
  
-print "Model trained"
+print ("Model trained")
 
 # Evaluate the performace
 
-print "Evaluating"
+print ("Evaluating")
 
 score = graph.evaluate({'input': X_test, 'output': y_test}, batch_size = 32, verbose = 1)
 
-print score
+print (score)
